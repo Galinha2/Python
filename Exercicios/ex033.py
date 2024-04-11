@@ -1,0 +1,5 @@
+n1 = float(input('Digite um numero: '))
+n2 = float((input('Digite outro numero: ')))
+n3 = float(input('Digite por fim outro numero: '))
+print(f'O numero maior é o: {(max(n1, n2, n3))}')
+print(f'O numero menor é o: {(min(n1, n2, n3))}')

@@ -1,0 +1,130 @@
+<html>
+<head>
+<title>PROJETOP.py</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #cf8e6d;}
+.s1 { color: #bcbec4;}
+.s2 { color: #bcbec4;}
+.s3 { color: #7a7e85;}
+.s4 { color: #6aab73;}
+.s5 { color: #2aacb8;}
+</style>
+</head>
+<body bgcolor="#1e1f22">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#606060" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+PROJETOP.py</font>
+</center></td></tr></table>
+<pre><span class="s0">from </span><span class="s1">bs4 </span><span class="s0">import </span><span class="s1">BeautifulSoup</span>
+<span class="s0">import </span><span class="s1">requests</span>
+<span class="s0">import </span><span class="s1">pygame</span>
+<span class="s0">import </span><span class="s1">button</span>
+<span class="s1">pygame</span><span class="s2">.</span><span class="s1">font</span><span class="s2">.</span><span class="s1">init</span><span class="s2">()</span>
+
+<span class="s0">def </span><span class="s1">game</span><span class="s2">():</span>
+    <span class="s3">#WEBSITE</span>
+    <span class="s1">url1 </span><span class="s2">= </span><span class="s4">'https://www.allkeyshop.com/blog/catalogue/category-playstation-5/'</span>
+    <span class="s1">pagina1 </span><span class="s2">= </span><span class="s1">requests</span><span class="s2">.</span><span class="s1">get</span><span class="s2">(</span><span class="s1">url1</span><span class="s2">)</span>
+    <span class="s1">soup1 </span><span class="s2">= </span><span class="s1">BeautifulSoup</span><span class="s2">(</span><span class="s1">pagina1</span><span class="s2">.</span><span class="s1">text</span><span class="s2">, </span><span class="s4">'html.parser'</span><span class="s2">)</span>
+
+
+    <span class="s3">#ENCONTRA OS JOGOS E PREÇOL ATRAVÉS DE INSPECIONAMENTO DO SITE</span>
+    <span class="s1">jogos </span><span class="s2">= </span><span class="s1">soup1</span><span class="s2">.</span><span class="s1">findAll</span><span class="s2">(</span><span class="s4">'h2'</span><span class="s2">, </span><span class="s1">class_</span><span class="s2">=</span><span class="s4">&quot;search-results-row-game-title&quot;</span><span class="s2">)</span>
+    <span class="s1">preços </span><span class="s2">= </span><span class="s1">soup1</span><span class="s2">.</span><span class="s1">findAll</span><span class="s2">(</span><span class="s4">'div'</span><span class="s2">, </span><span class="s1">class_</span><span class="s2">=</span><span class="s4">&quot;search-results-row-price&quot;</span><span class="s2">)</span>
+    <span class="s1">DICjogos </span><span class="s2">= {</span><span class="s4">'titulos'</span><span class="s2">: [], </span><span class="s4">'preços'</span><span class="s2">: []}</span>
+    <span class="s1">preçomin </span><span class="s2">= </span><span class="s0">None</span>
+    <span class="s1">preçomax </span><span class="s2">= </span><span class="s0">None</span>
+
+    <span class="s3">#LISTAGEM DE JOGOS E PREÇOS KINGUIN</span>
+    <span class="s0">for </span><span class="s1">games</span><span class="s2">, </span><span class="s1">prices </span><span class="s0">in </span><span class="s1">zip</span><span class="s2">(</span><span class="s1">jogos</span><span class="s2">, </span><span class="s1">preços</span><span class="s2">):</span>
+        <span class="s1">title </span><span class="s2">= </span><span class="s1">games</span><span class="s2">.</span><span class="s1">text</span><span class="s2">.</span><span class="s1">strip</span><span class="s2">()</span>
+        <span class="s1">price </span><span class="s2">= </span><span class="s1">float</span><span class="s2">(</span><span class="s1">prices</span><span class="s2">.</span><span class="s1">text</span><span class="s2">.</span><span class="s1">strip</span><span class="s2">().</span><span class="s1">replace</span><span class="s2">(</span><span class="s4">'€'</span><span class="s2">, </span><span class="s4">''</span><span class="s2">).</span><span class="s1">replace</span><span class="s2">(</span><span class="s4">','</span><span class="s2">, </span><span class="s4">'.'</span><span class="s2">))</span>
+
+        <span class="s1">DICjogos</span><span class="s2">[</span><span class="s4">'titulos'</span><span class="s2">].</span><span class="s1">append</span><span class="s2">(</span><span class="s1">title</span><span class="s2">)</span>
+        <span class="s1">DICjogos</span><span class="s2">[</span><span class="s4">'preços'</span><span class="s2">].</span><span class="s1">append</span><span class="s2">(</span><span class="s1">price</span><span class="s2">)</span>
+
+        <span class="s1">print</span><span class="s2">(</span><span class="s4">f'</span><span class="s0">{</span><span class="s1">games</span><span class="s2">.</span><span class="s1">text</span><span class="s0">:</span><span class="s4">&lt;40</span><span class="s0">}  {</span><span class="s1">prices</span><span class="s2">.</span><span class="s1">text</span><span class="s2">.</span><span class="s1">strip</span><span class="s2">()</span><span class="s0">}</span><span class="s4">'</span><span class="s2">)</span>
+        <span class="s1">print</span><span class="s2">(</span><span class="s4">'-'</span><span class="s2">*</span><span class="s5">49</span><span class="s2">)</span>
+
+    <span class="s3">#PROCURA O PREÇO MAXIMO E MINIMO</span>
+    <span class="s0">for </span><span class="s1">title</span><span class="s2">, </span><span class="s1">price </span><span class="s0">in </span><span class="s1">zip</span><span class="s2">(</span><span class="s1">DICjogos</span><span class="s2">[</span><span class="s4">'titulos'</span><span class="s2">], </span><span class="s1">DICjogos</span><span class="s2">[</span><span class="s4">'preços'</span><span class="s2">]):</span>
+        <span class="s0">if </span><span class="s1">preçomin </span><span class="s0">is None or </span><span class="s1">price </span><span class="s2">&lt; </span><span class="s1">preçomin</span><span class="s2">:</span>
+            <span class="s1">preçomin </span><span class="s2">= </span><span class="s1">price</span>
+        <span class="s0">if </span><span class="s1">preçomax </span><span class="s0">is None or </span><span class="s1">price </span><span class="s2">&gt; </span><span class="s1">preçomax</span><span class="s2">:</span>
+            <span class="s1">preçomax </span><span class="s2">= </span><span class="s1">price</span>
+    <span class="s1">print</span><span class="s2">(</span><span class="s1">preçomin</span><span class="s2">)</span>
+    <span class="s1">print</span><span class="s2">(</span><span class="s1">preçomax</span><span class="s2">)</span>
+
+    <span class="s1">print</span><span class="s2">(</span><span class="s4">f'TOTAL PREÇOS: </span><span class="s0">{</span><span class="s1">sum</span><span class="s2">(</span><span class="s1">DICjogos</span><span class="s2">[</span><span class="s4">'preços'</span><span class="s2">])</span><span class="s0">}</span><span class="s4">€'</span><span class="s2">)</span>
+    <span class="s1">print</span><span class="s2">(</span><span class="s4">f'NUMERO DE JOGOS: </span><span class="s0">{</span><span class="s1">len</span><span class="s2">(</span><span class="s1">jogos</span><span class="s2">)</span><span class="s0">}</span><span class="s4">'</span><span class="s2">)</span>
+
+    <span class="s0">return </span><span class="s1">DICjogos</span>
+
+
+<span class="s3">#TEXTO</span>
+<span class="s0">def </span><span class="s1">conteudo</span><span class="s2">(</span><span class="s1">ecra</span><span class="s2">, </span><span class="s1">DICjogos</span><span class="s2">):</span>
+    <span class="s1">font </span><span class="s2">= </span><span class="s1">pygame</span><span class="s2">.</span><span class="s1">font</span><span class="s2">.</span><span class="s1">Font</span><span class="s2">(</span><span class="s0">None</span><span class="s2">, </span><span class="s5">25</span><span class="s2">)</span>
+    <span class="s1">y_position </span><span class="s2">= </span><span class="s5">50</span>
+    <span class="s0">for </span><span class="s1">title</span><span class="s2">, </span><span class="s1">price </span><span class="s0">in </span><span class="s1">zip</span><span class="s2">(</span><span class="s1">DICjogos</span><span class="s2">[</span><span class="s4">'titulos'</span><span class="s2">], </span><span class="s1">DICjogos</span><span class="s2">[</span><span class="s4">'preços'</span><span class="s2">]):</span>
+        <span class="s1">text </span><span class="s2">= </span><span class="s4">f'</span><span class="s0">{</span><span class="s1">title</span><span class="s0">:</span><span class="s4">&lt;40</span><span class="s0">}  {</span><span class="s1">price</span><span class="s0">}</span><span class="s4">€'</span>
+        <span class="s1">surface </span><span class="s2">= </span><span class="s1">font</span><span class="s2">.</span><span class="s1">render</span><span class="s2">(</span><span class="s1">text</span><span class="s2">, </span><span class="s0">True</span><span class="s2">, (</span><span class="s5">0</span><span class="s2">, </span><span class="s5">0</span><span class="s2">, </span><span class="s5">0</span><span class="s2">))</span>
+        <span class="s1">ecra</span><span class="s2">.</span><span class="s1">blit</span><span class="s2">(</span><span class="s1">surface</span><span class="s2">, (</span><span class="s5">5</span><span class="s2">, </span><span class="s1">y_position</span><span class="s2">))</span>
+        <span class="s1">y_position </span><span class="s2">+= </span><span class="s5">30</span>
+<span class="s3">#RESOLUÇÃO DO ECRÃ</span>
+<span class="s1">altura </span><span class="s2">= </span><span class="s5">900</span>
+<span class="s1">largura </span><span class="s2">= </span><span class="s5">400</span>
+
+<span class="s1">ecra </span><span class="s2">= </span><span class="s1">pygame</span><span class="s2">.</span><span class="s1">display</span><span class="s2">.</span><span class="s1">set_mode</span><span class="s2">((</span><span class="s1">largura</span><span class="s2">, </span><span class="s1">altura</span><span class="s2">))</span>
+<span class="s1">pygame</span><span class="s2">.</span><span class="s1">display</span><span class="s2">.</span><span class="s1">set_caption</span><span class="s2">(</span><span class="s4">'DEMO'</span><span class="s2">)</span>
+
+<span class="s3">#IMAGENS</span>
+<span class="s1">seta </span><span class="s2">= </span><span class="s1">pygame</span><span class="s2">.</span><span class="s1">image</span><span class="s2">.</span><span class="s1">load</span><span class="s2">(</span><span class="s4">'front.png'</span><span class="s2">).</span><span class="s1">convert_alpha</span><span class="s2">()</span>
+<span class="s1">seta2 </span><span class="s2">= </span><span class="s1">pygame</span><span class="s2">.</span><span class="s1">image</span><span class="s2">.</span><span class="s1">load</span><span class="s2">(</span><span class="s4">'back.png'</span><span class="s2">).</span><span class="s1">convert_alpha</span><span class="s2">()</span>
+<span class="s1">exit </span><span class="s2">= </span><span class="s1">pygame</span><span class="s2">.</span><span class="s1">image</span><span class="s2">.</span><span class="s1">load</span><span class="s2">(</span><span class="s4">'exit.jpg'</span><span class="s2">).</span><span class="s1">convert_alpha</span><span class="s2">()</span>
+
+<span class="s1">start_butao </span><span class="s2">= </span><span class="s1">button</span><span class="s2">.</span><span class="s1">Botao</span><span class="s2">(</span><span class="s5">300</span><span class="s2">, </span><span class="s5">10</span><span class="s2">, </span><span class="s1">seta</span><span class="s2">, </span><span class="s5">0.5</span><span class="s2">)</span>
+<span class="s1">exit_butao </span><span class="s2">= </span><span class="s1">button</span><span class="s2">.</span><span class="s1">Botao</span><span class="s2">(-</span><span class="s5">5</span><span class="s2">, </span><span class="s5">10</span><span class="s2">, </span><span class="s1">seta2</span><span class="s2">, </span><span class="s5">0.5</span><span class="s2">)</span>
+<span class="s1">sai </span><span class="s2">= </span><span class="s1">button</span><span class="s2">.</span><span class="s1">Botao</span><span class="s2">(</span><span class="s5">115</span><span class="s2">, -</span><span class="s5">10</span><span class="s2">, </span><span class="s1">exit</span><span class="s2">, </span><span class="s5">.8</span><span class="s2">)</span>
+
+<span class="s1">run </span><span class="s2">= </span><span class="s0">True</span>
+<span class="s0">while </span><span class="s1">run</span><span class="s2">:</span>
+    <span class="s1">ecra</span><span class="s2">.</span><span class="s1">fill</span><span class="s2">((</span><span class="s5">202</span><span class="s2">, </span><span class="s5">228</span><span class="s2">, </span><span class="s5">241</span><span class="s2">))</span>
+    <span class="s1">DICjogos </span><span class="s2">= </span><span class="s1">game</span><span class="s2">()</span>
+    <span class="s1">conteudo</span><span class="s2">(</span><span class="s1">ecra</span><span class="s2">, </span><span class="s1">DICjogos</span><span class="s2">)</span>
+    <span class="s0">if </span><span class="s1">start_butao</span><span class="s2">.</span><span class="s1">draw</span><span class="s2">(</span><span class="s1">ecra</span><span class="s2">):</span>
+        <span class="s1">print</span><span class="s2">(</span><span class="s4">'NEXT'</span><span class="s2">)</span>
+    <span class="s0">if </span><span class="s1">exit_butao</span><span class="s2">.</span><span class="s1">draw</span><span class="s2">(</span><span class="s1">ecra</span><span class="s2">):</span>
+        <span class="s1">print</span><span class="s2">(</span><span class="s4">'BACK'</span><span class="s2">)</span>
+    <span class="s0">if </span><span class="s1">sai</span><span class="s2">.</span><span class="s1">draw</span><span class="s2">(</span><span class="s1">ecra</span><span class="s2">):</span>
+        <span class="s1">run </span><span class="s2">= </span><span class="s0">False</span>
+
+
+    <span class="s0">for </span><span class="s1">evento </span><span class="s0">in </span><span class="s1">pygame</span><span class="s2">.</span><span class="s1">event</span><span class="s2">.</span><span class="s1">get</span><span class="s2">():</span>
+        <span class="s0">if </span><span class="s1">evento</span><span class="s2">.</span><span class="s1">type </span><span class="s2">== </span><span class="s1">pygame</span><span class="s2">.</span><span class="s1">QUIT</span><span class="s2">:</span>
+            <span class="s1">run </span><span class="s2">= </span><span class="s0">False</span>
+    <span class="s1">pygame</span><span class="s2">.</span><span class="s1">display</span><span class="s2">.</span><span class="s1">flip</span><span class="s2">()</span>
+
+<span class="s1">pygame</span><span class="s2">.</span><span class="s1">quit</span><span class="s2">()</span>
+
+<span class="s4">'''#ALLKEYSHOP 
+url1 = 'https://www.allkeyshop.com/blog/catalogue/category-pc-games-all/' 
+pagina1 = requests.get(url1) 
+soup1 = BeautifulSoup(pagina1.text, 'html.parser') 
+ 
+jogos = soup1.findAll('h2', class_=&quot;search-results-row-game-title&quot;) 
+preços = soup1.findAll('div', class_=&quot;search-results-row-price&quot;) 
+preçotot = [] 
+for games, prices in zip(jogos, preços): 
+    print(f'{games.text:&lt;40}  {prices.text.strip()}') 
+    preçotot.append(float(prices.text.replace('€', ''))) 
+    print('-'*49) 
+print(f'TOTAL PREÇOS: {sum(preçotot)}€') 
+print(f'NUMERO DE JOGOS: {len(jogos)}') 
+ 
+print(f'TOTAL PREÇOS: {sum(preçotot)}€') 
+print(f'NUMERO DE JOGOS: {len(jogos)}')'''</span>
+</pre>
+</body>
+</html>

@@ -1,0 +1,6 @@
+n1 = input('Diga algo com letras e numeros: ')
+print('{} Contem letras e numeros?'.format(n1), n1.isalnum())
+n2 = input('Diga algo com apenas numeros: ')
+print('{} Contem apenas numeros?'.format(n2), n2.isnumeric())
+n3 = input('Diga algo que contenha apenas letras: ')
+print('{} Contem apenas letras?'.format(n3), n3.isalpha())
